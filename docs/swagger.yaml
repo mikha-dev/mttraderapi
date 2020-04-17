@@ -1,0 +1,322 @@
+basePath: /api/v1
+definitions:
+  httputil.HTTPError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+  model.AddTrade:
+    properties:
+      command:
+        example: 0
+        type: integer
+      price:
+        example: 1.1456
+        type: number
+      sl:
+        example: 1.1456
+        type: number
+      symbol:
+        example: EURUSD
+        type: string
+      tp:
+        example: 1.1456
+        type: number
+      volume:
+        example: 0.1
+        type: number
+    required:
+    - command
+    - price
+    - symbol
+    - volume
+    type: object
+  model.CloseTrade:
+    properties:
+      ticket:
+        example: 101
+        type: integer
+      volume:
+        example: 0.1
+        type: number
+    required:
+    - ticket
+    type: object
+  model.LoginUser:
+    properties:
+      login:
+        example: 1
+        format: int64
+        type: integer
+      password:
+        example: 1234Aa
+        type: string
+    required:
+    - login
+    - password
+    type: object
+  model.Trade:
+    properties:
+      close_price:
+        type: number
+      close_time:
+        type: integer
+      cmd:
+        type: integer
+      comment:
+        type: string
+      digits:
+        type: integer
+      expiration:
+        type: integer
+      login:
+        type: integer
+      magic:
+        type: integer
+      open_price:
+        type: number
+      open_time:
+        type: integer
+      profit:
+        type: number
+      sl:
+        type: number
+      symbol:
+        type: string
+      ticket:
+        type: integer
+      tp:
+        type: number
+      volume:
+        type: integer
+    type: object
+  model.UpdateTrade:
+    properties:
+      price:
+        example: 1.1456
+        type: number
+      sl:
+        example: 1.1456
+        type: number
+      ticket:
+        example: 101
+        type: integer
+      tp:
+        example: 1.1456
+        type: number
+    required:
+    - ticket
+    type: object
+  model.UserLoginResponse:
+    properties:
+      code:
+        type: integer
+      expire:
+        type: string
+      token:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: mikhail@dev4traders.com
+    name: devtraders
+    url: https://dev4traders.com
+  description: This is a mt4 trader rest api server.
+  license:
+    name: Commerce
+  termsOfService: http://swagger.io/terms/
+  title: MT4 Trader REST API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: get user info
+      parameters:
+      - description: credentials
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      summary: Auth user
+      tags:
+      - users
+  /trades/{login}:
+    get:
+      consumes:
+      - application/json
+      description: get User trades by login
+      parameters:
+      - description: User ID
+        in: path
+        name: login
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Trade'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: List an user trades
+      tags:
+      - trades
+  /trades/add:
+    post:
+      consumes:
+      - application/json
+      description: add by json trade
+      parameters:
+      - description: Add trade
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.AddTrade'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Trade'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Add an trade
+      tags:
+      - trades
+  /trades/close:
+    patch:
+      consumes:
+      - application/json
+      description: close by json trade
+      parameters:
+      - description: Close trade
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.CloseTrade'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Close an trade
+      tags:
+      - trades
+  /trades/update:
+    patch:
+      consumes:
+      - application/json
+      description: update by json trade
+      parameters:
+      - description: Update trade
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateTrade'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/httputil.HTTPError'
+      security:
+      - ApiKeyAuth: []
+      summary: Update an trade
+      tags:
+      - trades
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

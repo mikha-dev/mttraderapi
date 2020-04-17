@@ -1,0 +1,18 @@
+{
+    "webserver": {
+        "addr": ":8080",
+        "mode": "debug"
+    },
+    "manager":
+        {
+            "serveraddr": "mtdemo1.com:443",
+            "account": 2501,
+            "password": "",
+            "workercount": 1
+        },
+    "managerlogger":
+        {
+        "level": "debug",
+        "path": "./logs/mt4-trader.log"
+    }
+}

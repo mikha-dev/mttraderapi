@@ -1,0 +1,14 @@
+{
+    "level": "info",
+    "outputPaths": ["stdout"],
+    "errorOutputPaths": ["stderr"],
+    "encoding": "console",
+    "encoderConfig": {
+        "messageKey": "message",
+        "levelKey": "level",
+        "timeKey": "time",
+        "levelEncoder": "lowercase",
+        "timeEncoder": "iso8601"
+    }
+}
+
