@@ -1,2 +1,2 @@
 # mttraderapi
-Metatrader 4 RESP API service for trading purpose
+Metatrader 4 REST API service for trading purpose
